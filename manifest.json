@@ -1,0 +1,28 @@
+{
+    "name": "Medium Unlimiter",
+    "version": "1.0",
+    "manifest_version": 2,
+    "permissions": [
+        "webNavigation",
+        "tabs",
+        "cookies",
+        "https://medium.com/*",
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://medium.com/*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    }
+}
