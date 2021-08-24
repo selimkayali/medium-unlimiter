@@ -12,5 +12,9 @@ chrome.webNavigation.onCompleted.addListener(function () {
 
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(function () {
-    makeUnlimited();
+    chrome.tabs.getSelected(null, (tab) => {
+        if (tab.url.includes('https://medium.com/')) {
+            makeUnlimited();
+        }
+    })
 });
