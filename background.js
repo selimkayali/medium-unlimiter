@@ -1,20 +1,23 @@
-function makeUnlimited() {
-    chrome.cookies.get({ url: 'https://medium.com', name: 'uid' }, function (obj) {
+let sites = ['https://medium.com/',
+    'https://itnext.io/',
+    'https://betterprogramming.pub/',
+    'https://netbasal.com/'];
+
+
+function makeUnlimited(site) {
+    chrome.cookies.get({ url: `${site}`, name: 'uid' }, function (obj) {
         if (obj !== undefined) {
-            chrome.cookies.remove({ url: 'https://medium.com', name: 'uid' }, function (obj) { console.log('Medium Unlimiter Works!') });
+            chrome.cookies.remove({ url: `${site}`, name: 'uid' }, function () { console.log(`Medium ${site} Unlimiter Works!`) });
+            if (site != 'https://medium.com/') {
+                chrome.cookies.remove({ url: `https://medium.com/*`, name: 'uid' }, function () { console.log('Medium Unlimiter Works!') });
+            }
         }
     });
 }
 
-chrome.webNavigation.onCompleted.addListener(function () {
-    makeUnlimited();
-}, { url: [{ urlMatches: 'https://medium.com/*' }] });
-
-
-chrome.webNavigation.onHistoryStateUpdated.addListener(function () {
-    chrome.tabs.getSelected(null, (tab) => {
-        if (tab.url.includes('https://medium.com/')) {
-            makeUnlimited();
-        }
-    })
-});
+sites.forEach(site => {
+    console.log(site)
+    chrome.webNavigation.onCompleted.addListener(function () {
+        makeUnlimited(site);
+    }, { url: [{ urlMatches: `${site}*` }] });
+})
